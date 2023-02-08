@@ -1,0 +1,5 @@
+package com.edu.SpringMVC1.model.emp;
+
+public class EmpService {
+
+}

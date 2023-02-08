@@ -1,0 +1,13 @@
+package com.edu.SpringMVC1.controller;
+
+import org.springframework.stereotype.Controller;
+
+import com.edu.SpringMVC1.model.emp.EmpService;
+
+import lombok.Setter;
+
+@Controller
+@Setter
+public class EmpController {
+	private EmpService empService;
+}

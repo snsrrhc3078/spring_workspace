@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 이 어플리케이션에서 사용될 모든 ~~~ 객체들의 명단을 적자
+	여기에 적어놓으면 스프링이 알아서 인스턴스를 생성하고 관리해준다..
+	또 필요한 곳에 주입(Injection까지 해준다..) -->
+	<bean id="fryingPan" class="gui.cook.FryingPan"></bean>
+	<bean id="electPan" class="gui.cook.ElectPan"></bean>
+	<bean id="cook" class="gui.cook.Cook"></bean>
+	
+	<!-- 회원가입에 필요한 컴포넌트들을 등록하자 -->
+	<bean id="id" class="javax.swing.JTextField">
+		<!-- new JTextField(20) 와 같다 -->
+		<constructor-arg type="int" value="20"/>
+	</bean>
+	<bean id="name" class="javax.swing.JTextField">
+		<!-- new JTextField(20) 와 같다 -->
+		<constructor-arg type="int" value="20"/>
+	</bean>
+	<bean id="email" class="javax.swing.JTextField">
+		<!-- new JTextField(20) 와 같다 -->
+		<constructor-arg type="int" value="20"/>
+	</bean>
+	<bean id="regist" class="javax.swing.JButton">
+		<!-- new JButton("등록") 와 같다 -->
+		<constructor-arg type="String" value="등록"/>
+	</bean>
+	<bean id="layout" class="java.awt.FlowLayout"></bean>
+	<bean id="joinForm" class="gui.view.JoinForm">
+		<!-- joinform이 필요로 하는 빈들을 주입시키기(즉 엮기 : weaving) -->
+		<property name="t_id" ref="id"></property>
+		<property name="t_name" ref="name"></property>
+		<property name="t_email" ref="email"></property>
+		<property name="bt_regist" ref="regist"></property>
+		<property name="flowLayout" ref="layout"></property>
+	</bean>
+	
+	
+	<!-- 학생 등록 -->
+	<bean id="student" class="gui.school.Student"></bean>
+</beans>
+ 
