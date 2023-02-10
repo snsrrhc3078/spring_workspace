@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 이 xml 에는 관리자, 클라이언트 모두 공통으로 사용할 수 있는
+	모델(DAO, Service) 객체들이 등록될 것임 -->
+	<bean id="mybatisBoardDAO" class="com.edu.mvc2.model.board.MybatisBoardDAO"></bean>
+	<bean id="mybatisConfig" class="com.edu.mvc2.mybatis.MybatisConfig" factory-method="getInstance"></bean>
+	<bean id="boardServiceImpl" class="com.edu.mvc2.model.board.BoardServiceImpl">
+		<property name="boardDAO" ref="mybatisBoardDAO"></property>
+		<property name="config" ref="mybatisConfig"></property>
+	</bean>
+</beans>
