@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.edu.springboard.domain.ReBoard;
+import com.edu.springboard.exception.ReBoardException;
 import com.edu.springboard.model.reboard.ReBoardService;
 
 
@@ -24,7 +26,7 @@ public class ReBoardController {
 	
 	
 	@Autowired //xml에 빈을 등록한적이 없으므로, 자동 주입받자
-	ReBoardService reboardServoce;
+	ReBoardService reBoardService;
 	
 	//목록 요청 처리
 	@RequestMapping(value="/reboard/list", method=RequestMethod.GET)
@@ -32,7 +34,7 @@ public class ReBoardController {
 		logger.info("목록 요청 받음");
 		
 		ModelAndView mav=new ModelAndView();
-		List reboardList=reboardServoce.selectAll(); //3단계
+		List reboardList=reBoardService.selectAll(); //3단계
 		mav.addObject("reboardList", reboardList); //4단계
 		mav.setViewName("reboard/list");
 		
@@ -65,7 +67,7 @@ public class ReBoardController {
 	public ModelAndView regist(ReBoard reBoard) {
 		
 		//3단계 일 시키기
-		reboardServoce.insert(reBoard);
+		reBoardService.insert(reBoard);
 		
 		//4단계 생략
 		
@@ -77,10 +79,40 @@ public class ReBoardController {
 	public ModelAndView getDetail(int reboard_idx) {
 		
 		//3단계 일 시키기
-		ReBoard reBoard = reboardServoce.select(reboard_idx);
+		ReBoard reBoard = reBoardService.select(reboard_idx);
 		//4단계 저장
 		ModelAndView mav = new ModelAndView("/reboard/detail");
 		mav.addObject("reBoard", reBoard);
+		return mav;
+	}
+	
+	@PostMapping("/reboard/delete")
+	public ModelAndView delete(int reboard_idx) {
+		
+		//3단계
+		reBoardService.delete(reboard_idx);
+		
+		ModelAndView mav = new ModelAndView("redirect:/reboard/list");
+		return mav;
+	}
+	
+	@PostMapping("/reboard/edit")
+	public ModelAndView update(ReBoard reBoard) {	
+		reBoardService.update(reBoard);
+		
+		return new ModelAndView("redirect:/reboard/detail?reboard_idx="+reBoard.getReboard_idx());
+	}
+	
+	//글쓰기, 수정, 삭제의 경우 ReBoardException을 처리
+	@ExceptionHandler(ReBoardException.class)
+	public ModelAndView handle(ReBoardException e) {
+		
+		ModelAndView mav = new ModelAndView();
+		
+		//에러 저장
+		mav.addObject("e", e);
+		mav.setViewName("/error/result");
+		
 		return mav;
 	}
 }

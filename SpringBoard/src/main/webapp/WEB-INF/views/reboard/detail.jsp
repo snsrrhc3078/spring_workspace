@@ -37,15 +37,23 @@
 		  del();
 	  });
 	  $("#bt_list").click(function(){
-		  location.href="/board/list"
+		  location.href="/reboard/list"
 	  });
+	  $("#bt_replyform").click(function(){
+		  //숨겨져있던 답변등록 폼 등장
+		  $("#reply_section").show();
+	  });
+	  
+	  
+	  $("#reply_section").hide();
   })
+  
   </script>
 </head>
 <body>
 	<h2 class="d-flex justify-content-center mt-3">상세 보기</h2>
 	<div class="container">
-		<div class="row">
+		<div class="row mb-3">
 			<div class="col">
 				<form id="form1">
 					<input type="hidden" name="reboard_idx" value="<%=reBoard.getReboard_idx()%>">
@@ -64,6 +72,27 @@
 					<button type="button" class="btn btn-warning" id="bt_edit">수정</button>
 					<button type="button" class="btn btn-warning" id="bt_del">삭제</button>
 					<button type="button" class="btn btn-primary" id="bt_list">목록</button>
+					<button type="button" class="btn btn-primary" id="bt_replyform">답변하기</button>
+				</form>
+			</div>
+		</div>
+		
+		<div class="row mb-3" id ="reply_section">
+			<div class="col">
+				<form id="form2">
+					<div class="form-group">
+						<input type="text" name="" class="form-control" placeholder="제목">
+					</div>
+					<div class="form-group">
+						<input type="text" name="" class="form-control" placeholder="작성자">
+					</div>
+					<div class="form-group">
+						<textarea class="form-control" name=""></textarea>
+					</div>
+
+					<div class="form-group">
+						<button type="button" class="btn btn-primary">등록</button>
+					</div>
 				</form>
 			</div>
 		</div>
