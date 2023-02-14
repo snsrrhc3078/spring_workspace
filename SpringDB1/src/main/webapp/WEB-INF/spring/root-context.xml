@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd"
+	>
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- 스프링이 지원하는 트랜잭션 등의 서비스의 혜택을 보려면, db연동 기술 자체를
+	스프링이 주도하여 진행해야 한다.. 따라서 데이터베이스에 대한 접속 자체도 스프링으로 처리 -->
+	
+	<!-- 스프링이 데이터베이스를 관리하도록 한다 -->
+	<jee:jndi-lookup 
+	jndi-name="jdbc/oracle"
+	id="dataSource"
+	resource-ref="true"
+	/>
+	
+	<!-- 스프링이 지원하는 트랜잭션 매니저를 등록한다..
+	연동하려는 기술에 따라 트랜잭션 매니저를 등록해야 한다..
+	TransactionManager 란? 개발자가 트랜잭션을 직접 처리하지 않고,
+										스프링 프레임워크에서 트랜잭션을 처리할 때 사용되는 객체
+	ex) 
+	연동기술 - jdbc : DataSourceTransactionmanager
+	연동기술 - hibernate : HibernateTransactionManager
+	연동기술 - mybatis : DataSourceTransactionManager(mybatis 사실 jdbc를 제어하기 때문임)
+	 -->
+	<bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+	p:dataSource-ref="dataSource">
+		<!-- 사용하려는 db 종류와 트랜잭션 매니저를 연계한다 -->
+	</bean>
+	
+	<!-- 스프링 연동 mybatis 설정 
+	Mybatis-Spring 에서는 우리가 평소 사용하던 SQlSessionFactory
+	객체를 SQlSessionFactoryBean으로 표현-->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean"
+	p:dataSource-ref="dataSource"
+	p:configLocation="classpath:com/edu/db/mybatis/config.xml">
+		<!-- 더이상 mybatis 자체의 설정 파일에서 데이터소스를 얻어오면 안되고
+		스프링이 취득한 데이터 소스를 얻어와야 한다 -->
+	</bean>
+	
+	<!-- dao가 주로 사용했던 sqlSession은 mybatis-spring에서는
+	 sqlSessionTemplate자료형으로 표현된다 -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactoryBean"></constructor-arg>
+	</bean>
+	
+	<!-- DAO, Service 등 모델들 자동 등록 -->
+	<context:component-scan base-package="com.edu.db.model"></context:component-scan>
+	
+	
+</beans>

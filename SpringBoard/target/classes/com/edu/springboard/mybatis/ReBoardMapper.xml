@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReBoard">
+
+	<!-- 동물올림픽의 category==team, rank==step -->
+	<select id="selectAll" resultType="ReBoard">
+		select * from reboard order by team desc, step asc
+	</select>
+	
+	<select id="select" parameterType="int" resultType="ReBoard">
+		select * from reboard where reboard_idx=#{reboard_idx}
+	</select>
+	
+	<!-- 원글
+		같은 insert문 내에서 nextval 호출을 여러번해도, 오직 한번만 증가한다
+		mysql은 insert하고 select last_id()를 해야하는데, 이것은 mysql의 시퀀스가 내부에 있기 때문
+	 -->
+	<!-- 오라클에서 하나의 insert문에서는 .nextval를 호출해도 증가되지 않는다 -->
+	<insert id="insert" parameterType="ReBoard">
+		insert into reboard(reboard_idx, title, writer, content, team)
+		values (seq_reboard.nextval, #{title}, #{writer}, #{content}, seq_reboard.nextval)
+	</insert>
+	
+	<update id="update" parameterType="ReBoard">
+		update reboard set title=#{title}, writer=#{writer}, content=#{content}
+		where reboard_idx=#{reboard_idx}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete reboard where reboard_idx=#{reboard_idx}
+	</delete>
+	
+	<!-- 
+		댓글 다는 것이 어려운데, 댓글다는것은 두가지 동작이 필요하다
+		댓글이 쓰이면, 새로들어온 글의 다음 글들이 하나씩 밀리게 된다. 그래서 빈자리를 먼저 만들어두고,
+		댓글이 그 빈자리에 들어가야 한다. 트랜잭션 상황일 수도 있지만, 그 뒤의 글들이 없을때는 또 트랜잭션
+		상황이 아닐 수 있다.
+	 -->
+	 
+	 <!-- 답변 달기(자리확보 + 업데이트) -->
+	
+</mapper>
