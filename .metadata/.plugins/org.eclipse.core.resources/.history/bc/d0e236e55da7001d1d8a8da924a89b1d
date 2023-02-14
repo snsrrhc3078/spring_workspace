@@ -1,8 +1,0 @@
-package gui.school;
-
-public class Student {
-	
-	public void goSchool() {
-		System.out.println("등교합니다");
-	}
-}
