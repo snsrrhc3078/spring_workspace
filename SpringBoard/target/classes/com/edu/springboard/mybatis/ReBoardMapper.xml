@@ -38,5 +38,14 @@
 	 -->
 	 
 	 <!-- 답변 달기(자리확보 + 업데이트) -->
-	
+	 <update id="updateStep" parameterType="ReBoard">
+	 	update reboard
+	 	set step=step+1
+	 	where
+	 </update>
+	 
+	<insert id="reply" parameterType="ReBoard">
+		insert into reboard(reboard_idx, title, writer, content, team, step, depth)
+		values (seq_reboard.nextval, #{title}, #{writer}, #{content}, #{team}, #{step+1}, #{depth+1})
+	</insert>
 </mapper>
