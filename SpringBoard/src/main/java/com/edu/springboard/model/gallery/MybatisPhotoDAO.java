@@ -6,8 +6,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.edu.springboard.domain.Photo;
 import com.edu.springboard.exception.PhotoException;
-import com.edu.springboard.model.Photo;
 
 @Repository
 public class MybatisPhotoDAO implements PhotoDAO{

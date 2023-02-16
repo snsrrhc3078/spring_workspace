@@ -8,6 +8,11 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/spring/root-context.xml</param-value>
 	</context-param>
+	<context-param>
+		<param-name>dataPath</param-name>
+		<param-value>/resources/data/</param-value>
+	</context-param>
+	
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
 	<listener>

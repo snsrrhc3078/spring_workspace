@@ -22,7 +22,7 @@
 	
 	<jee:jndi-lookup 
 	id="dataSource"
-	jndi-name="jdbc/oracle"
+	jndi-name="jdbc/mysql"
 	resource-ref="true"></jee:jndi-lookup>
 	
 	<!-- 기술에 따른 트랜잭션 매니저를 빈으로 등록
@@ -40,6 +40,12 @@
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactoryBean"></constructor-arg>
 	</bean>
+	
+	<!-- db연동 기술중 spring jdbc 사용을 위한 설정 -->
+	<bean 
+	id="jdbcTemplate" 
+	class="org.springframework.jdbc.core.JdbcTemplate" 
+	p:dataSource-ref="dataSource"/>
 	
 	<!-- 
 		트랜잭션을 적용하는 방법은 크게 2가지

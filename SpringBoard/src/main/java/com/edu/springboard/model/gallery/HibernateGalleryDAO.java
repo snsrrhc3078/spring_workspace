@@ -2,7 +2,7 @@ package com.edu.springboard.model.gallery;
 
 import java.util.List;
 
-import com.edu.springboard.model.Gallery;
+import com.edu.springboard.domain.Gallery;
 
 public class HibernateGalleryDAO implements GalleryDAO{
 	public List selectAll() {

@@ -1,4 +1,4 @@
-package com.edu.springboard.model;
+package com.edu.springboard.domain;
 
 import java.util.List;
 

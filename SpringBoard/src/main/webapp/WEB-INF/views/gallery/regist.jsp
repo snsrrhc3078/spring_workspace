@@ -139,7 +139,7 @@ function regist() {
 		data:formData,
 		enctype:"multipart/form-data",
 		success:(result, status, xhr)=>{
-			alert("성공");
+			alert(result);
 		}
 	});
 	

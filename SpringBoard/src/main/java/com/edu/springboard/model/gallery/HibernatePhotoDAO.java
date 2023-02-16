@@ -2,7 +2,7 @@ package com.edu.springboard.model.gallery;
 
 import java.util.List;
 
-import com.edu.springboard.model.Photo;
+import com.edu.springboard.domain.Photo;
 
 public class HibernatePhotoDAO implements PhotoDAO{
 	public List selectAll() {

@@ -2,7 +2,7 @@ package com.edu.springboard.model.gallery;
 
 import java.util.List;
 
-import com.edu.springboard.model.Photo;
+import com.edu.springboard.domain.Photo;
 
 public interface PhotoDAO {
 	public List selectAll();

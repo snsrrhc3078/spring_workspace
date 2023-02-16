@@ -6,8 +6,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.edu.springboard.domain.Gallery;
 import com.edu.springboard.exception.GalleryException;
-import com.edu.springboard.model.Gallery;
 
 @Repository
 public class MybatisGalleryDAO implements GalleryDAO{
