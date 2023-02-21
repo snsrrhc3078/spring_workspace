@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+	<class name="com.edu.hibernateapp.domain.Notice" table="Notice">
+		<!-- primary key -->
+		<id name="notice_idx" type="int" column="notice_idx">
+			<generator class="native"></generator>
+		</id>
+		
+		<!-- general column -->
+		<property name="title" column="title" type="string"></property>
+		<property name="writer" column="writer" type="string"></property>
+		<property name="content" column="content" type="string"></property>
+		<property name="regdate" column="regdate" type="string"></property>
+		<property name="hit" column="hit" type="int"></property>
+	</class>
+</hibernate-mapping>
