@@ -1,8 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
-			
+	
+	<!-- 스캔 -->
+	<context:component-scan base-package="com.edu.springshop.model"></context:component-scan>
+	
+	<!-- jndi 가져오기 -->
+	<jee:jndi-lookup 
+	jndi-name="jdbc/oracle"
+	id="dataSource"
+	resource-ref="true"></jee:jndi-lookup>
+	
+	<!-- 트랜잭션 매니저 설정 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+	p:dataSource-ref="dataSource"></bean>
+	
+	<!-- 맵퍼 연동 -->
+	<bean 
+	id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean"
+	p:dataSource-ref="dataSource"
+	p:configLocation="classpath:com/edu/springshop/mybatis/config.xml"></bean>
+	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactoryBean"></constructor-arg>
+	</bean>
+	
+	<!-- 파일 업로드를 위한 빈 등록 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+	p:maxInMemorySize="3145728"></bean>
+	
+	<!-- 잭슨 등록 -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list value-type="java.util.ArrayList">
+				<ref bean="mappingJackson2HttpMessageConverter"/>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- jackson data binder 등록
+			json과 자바객체 사이의 자동 변환기 (converter) -->
+	<bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<value>application/json;charset=utf-8</value>
+		</property>
+	</bean>
 </beans>

@@ -73,9 +73,13 @@
 						</p>
 				</a>
 					<ul class="nav nav-treeview">
-						<li class="nav-item"><a href="/admin/product/registform.jsp"
+						<li class="nav-item"><a href="/admin/category/main"
 							class="nav-link"> <i class="far fa-circle nav-icon"></i>
-								<p>상품등록</p>
+								<p>카테고리관리</p>
+						</a></li>
+						<li class="nav-item"><a href="/admin/product/registform"
+							class="nav-link"> <i class="far fa-circle nav-icon"></i>
+								<p>상품관리</p>
 						</a></li>
 						<li class="nav-item"><a href="./index2.html" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
