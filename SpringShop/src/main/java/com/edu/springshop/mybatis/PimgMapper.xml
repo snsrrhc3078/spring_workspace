@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Pimg">
+
+	<resultMap type="Pimg" id="resultMap">
+		<id column="pimg_idx" property="pimg_idx" />
+		<result column="filename" property="filename" />
+		<association 
+		property="product"
+		column="product_idx"
+		javaType="Product"
+		select="Product.selectForSub"
+		></association>
+	</resultMap>
+
+	<select id="selectAll" resultMap="resultMap">
+		select * from pimg
+	</select>
+	<select id="select" resultMap="resultMap" parameterType="int">
+		select * from pimg
+		where pimg_idx=#{pimg_idx}
+	</select>
+	<!-- productMapper.xml의 resultMap에서 호출할 예정 -->
+	<select id="selectAllByFK" resultType="Pimg" parameterType="int">
+		select * from pimg
+		where product_idx=#{product_idx}
+	</select>
+	<insert id="insert" parameterType="Pimg">
+		insert into pimg(pimg_idx, product_idx, filename)
+		values (seq_pimg.nextval, #{product.product_idx}, #{filename})
+	</insert>
+	<delete id="delete" parameterType="int">
+		delete from pimg
+		where pimg_idx=#{pimg_idx}
+	</delete>
+</mapper>

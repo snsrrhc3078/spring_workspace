@@ -54,4 +54,7 @@
 			<value>application/json;charset=utf-8</value>
 		</property>
 	</bean>
+	
+	<!-- FileManager 등록 -->
+	<bean id="fileManager" class="com.edu.springshop.util.FileManager"></bean>
 </beans>

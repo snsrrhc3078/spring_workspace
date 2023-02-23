@@ -1,5 +1,7 @@
 package com.edu.springshop.domain;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
@@ -14,4 +16,5 @@ public class Product {
 	private String detail;
 	private Category category;
 	private MultipartFile[] files;
+	private List<Pimg> pimgList;
 }

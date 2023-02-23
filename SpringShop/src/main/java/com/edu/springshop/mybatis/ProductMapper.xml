@@ -1,3 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.edu.springshop.mybatis.ProductMapper"></mapper>
+<mapper namespace="Product">
+
+	<!-- 해당 상품에 소속된 이미지를 포함한 레코드 가져오기 -->
+	<resultMap type="Product" id="resultMap">
+		<id column="product_idx" property="product_idx" />
+		<result column="product_name" property="product_name" />
+		<result column="brand" property="brand" />
+		<result column="price" property="price" />
+		<result column="discount" property="discount" />
+		<result column="detail" property="detail" />
+		<association 
+		property="category"
+		column="category_idx"
+		javaType="Category"
+		select="Category.select"
+		></association>
+		<collection 
+		property="pimgList"
+		column="product_idx"
+		javaType="java.util.List"
+		ofType="Pimg"
+		select="Pimg.selectAllByFK"
+		></collection>
+	</resultMap>
+
+	<select id="selectAll" resultMap="resultMap">
+		select * from product order by product_idx desc
+	</select>
+	<select id="select" resultMap="resultMap" parameterType="int">
+		select * from product
+		where product_idx=#{product_idx}
+	</select>
+	<select id="selectForSub" resultType="Product" parameterType="int">
+		select * from product
+		where product_idx=#{product_idx}
+	</select>
+	<insert id="insert" parameterType="Product">
+		insert into 
+		product(product_idx, category_idx, product_name, brand, price, discount, detail)
+		values (seq_product.nextval, #{category.category_idx}, #{product_name}, #{brand}, #{price}, #{discount}, #{detail})
+		
+		<selectKey
+		keyColumn="product_idx"
+		keyProperty="product_idx"
+		order="AFTER"
+		resultType="int">
+			select seq_product.currval as product_idx from dual
+		</selectKey>
+	</insert>
+	<update id="update" parameterType="Product">
+		update product set category_idx=#{category.category_idx}, brand=#{brand}
+		, price=#{price}, discount=#{discount}, detail=#{detail}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from product
+		where product_idx=#{product_idx}
+	</delete>
+</mapper>

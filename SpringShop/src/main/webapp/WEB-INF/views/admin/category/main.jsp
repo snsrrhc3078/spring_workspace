@@ -121,18 +121,19 @@ tbody tr {
 									<h3 class="card-title">상세보기</h3>
 								</div>
 
-								<form id="form1">
+								<form id="form2">
 									<div class="card-body">
-										<input type="hidden" id="category_idx">
+										<input type="hidden" name="_method"> 
+										<input type="hidden" name="category_idx">
 										<div class="form-group">
 											<label for="category_name2">카테고리 이름</label> <input
 												type="text" class="form-control" placeholder="카테고리 이름.."
-												id="category_name2">
+												name="category_name">
 										</div>
 									</div>
 									<div class="card-footer">
-										<button type="button" class="btn btn-success">수정</button>
-										<button type="button" class="btn btn-danger">삭제</button>
+										<button type="button" class="btn btn-success" id="bt_edit">수정</button>
+										<button type="button" class="btn btn-danger" id="bt_del">삭제</button>
 									</div>
 								</form>
 							</div>
@@ -162,8 +163,8 @@ tbody tr {
 			props:["category"],
 			methods:{
 				getDetail:(category)=>{
-					$("#category_idx").val(category.category_idx);
-					$("#category_name2").val(category.category_name);
+					$("#form2 input[name='category_idx']").val(category.category_idx);
+					$("#form2 input[name='category_name']").val(category.category_name);
 				}
 			}
 	}
@@ -174,6 +175,12 @@ tbody tr {
 		
 		$("#bt_regist").click(()=>{
 			regist();
+		});
+		$("#bt_edit").click(()=>{
+			editAsync();
+		});
+		$("#bt_del").click(()=>{
+			del();
 		});
 		
 		getList();
@@ -206,6 +213,75 @@ tbody tr {
 			//서버로부터 전송된 HTTP 응답 헤더 정보가 실패일 때 반응
 			error:(xhr, status, err)=>{
 				console.log("에러났습니다", err);
+			}
+		});
+	}
+	
+	function edit() {
+		//동기방식 put
+		$("#form2 input[name='_method']").val("PUT");
+		
+		$("#form2").attr({
+			action:"/admin/rest/category",
+			method:"POST",
+		});
+		
+		$("#form2").submit();
+		
+		
+	}
+	
+	function editAsync() {
+		/* $("#form2 input[name='_method']").val("PUT");
+		let formData = $("#form2").serialize();
+		console.log(formData); */
+		
+		if(!confirm("수정하시겠습니까?")){
+			return;
+		}
+		
+		//json 방식으로 전송하기
+		//웹상의 데이터 교환시 데이터형식은 무조건 문자열이 되어야 한다
+		//따라서 자바스크립트 내장객체인 json 자체는 전송대상이 될 수 없다
+		//해결책: 문자열화 시키되 개발자가 일일이 수작업으로 하지 말고 JSON.stringify()활용
+		let json = {
+			_method:"PUT",
+			category_idx:$("#form2 input[name='category_idx']").val(),
+			category_name:$("#form2 input[name='category_name']").val()
+		};
+				
+		 //비동기방식 put
+		$.ajax({
+			url:"/admin/rest/category",
+			type:"PUT",
+			contentType:"application/json;charset=utf-8",
+			data:JSON.stringify(json),
+			processData:false, //Query string 화 여부
+			success:(result, status, xhr)=>{
+				console.log(result);
+				getList();
+			},
+			error:(xhr, status , err)=>{
+				console.log(err);
+			}
+			
+		});
+	}
+	
+	function del() {
+		if(!confirm("삭제하시겠습니까?")){
+			return;
+		}
+		
+		$.ajax({
+			url:"/admin/rest/category/"+$("#form2 input[name='category_idx']").val(),
+			type:"DELETE",
+			success:(result, status, xhr)=>{
+				console.log(result);
+				getList();
+			},
+			error:(xhr, status, err)=>{
+				console.log(err);
 			}
 		});
 	}
