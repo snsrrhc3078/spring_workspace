@@ -78,7 +78,7 @@
 						<div class="col">
 							<div class="card card-primary">
 								<div class="card-header">
-									<h3 class="card-title">상품 등록</h3>
+									<h3 class="card-title">상품 상세보기</h3>
 								</div>
 								<!-- /.card-header -->
 								<!-- form start -->

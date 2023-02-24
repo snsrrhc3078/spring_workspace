@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.edu.springshop.domain.Product;
+import com.edu.springshop.exception.PimgException;
+import com.edu.springshop.exception.ProductException;
 import com.edu.springshop.exception.UploadException;
 import com.edu.springshop.model.product.ProductService;
 import com.edu.springshop.util.Message;
@@ -48,6 +50,22 @@ public class RestProductController {
 	
 	@ExceptionHandler(UploadException.class)
 	public ResponseEntity<Message> handler(UploadException e){
+		
+		Message message = new Message();
+		message.setMsg(e.getMessage());
+		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+		return entity;
+	}
+	@ExceptionHandler(ProductException.class)
+	public ResponseEntity<Message> handler(ProductException e){
+		
+		Message message = new Message();
+		message.setMsg(e.getMessage());
+		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+		return entity;
+	}
+	@ExceptionHandler(PimgException.class)
+	public ResponseEntity<Message> handler(PimgException e){
 		
 		Message message = new Message();
 		message.setMsg(e.getMessage());

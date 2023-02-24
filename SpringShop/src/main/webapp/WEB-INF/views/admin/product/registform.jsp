@@ -225,6 +225,11 @@
 			enctype:"multipart/form-data",
 			success:(result, status, xhr)=>{
 				console.log(result);
+			},
+			error:(xhr, status, err)=>{
+				console.log(xhr);
+				let json = JSON.parse(xhr.responseJSON);
+				console.log(json);
 			}
 		});
 	}

@@ -1,3 +1,5 @@
+<%@page import="com.edu.springshop.domain.Category"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
     <header class="header">
         <div class="container-fluid">
@@ -10,13 +12,17 @@
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="./index.html">Home</a></li>
-                            <%//for(int i=0;i<categoryList.size();i++){ %>
-                            <%// Category category=categoryList.get(i);%>
-                            <li><a href="#"><%//=category.getCategory_name() %></a></li>
-                            <%//} %>
+                            <li class="active"><a href="/">Home</a></li>
+                            <%
+                            	//카테고리 목록 가져오기
+                            	List<Category> categoryList = (List)request.getAttribute("categoryList");
+                            %>
+                            <%for(int i=0;i<categoryList.size();i++){ %>
+                            <% Category category=categoryList.get(i);%>
+                            <li><a href="#"><%=category.getCategory_name() %></a></li>
+                            <%} %>
                             
-                            <li><a href="/shop.jsp">Shop</a></li>
+                            <li><a href="/shop/list">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="./product-details.html">Product Details</a></li>
@@ -25,8 +31,6 @@
                                     <li><a href="./blog-details.html">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -36,7 +40,6 @@
 
                             <a href="/member/loginform.jsp">Login</a>
                             <a href="/member/joinform.jsp">Register</a>
-                            <a href="/member/logout.jsp">logout</a>
 
                         </div>
                         <ul class="header__right__widget">
@@ -48,7 +51,7 @@
  
                             	<a href="/payment/cartlist.jsp">
                             		<span class="icon_bag_alt"></span>
-                                	<div class="tip">2</div>
+                                	<div class="tip">0</div>
                                 </a>
                                 
                             </li>

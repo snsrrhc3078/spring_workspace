@@ -53,6 +53,7 @@ public class FileManager {
 			throw new UploadException("업로드 실패", e);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			throw new UploadException("업로드 실패", e);
 		}
 		
 		return filenameList;

@@ -5,10 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.edu.springshop.domain.Pimg;
 import com.edu.springshop.domain.Product;
+import com.edu.springshop.exception.PimgException;
+import com.edu.springshop.exception.ProductException;
+import com.edu.springshop.exception.UploadException;
 import com.edu.springshop.util.FileManager;
 
 @Service
@@ -35,7 +40,8 @@ public class ProductServiceImpl implements ProductService{
 		return productDAO.select(product_idx);
 	}
 
-	public void regist(Product product, String dir){
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void regist(Product product, String dir) throws ProductException, UploadException, PimgException{
 		
 		//파일을 서버에 저장
 		MultipartFile[] files = product.getFiles();
