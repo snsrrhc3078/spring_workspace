@@ -67,4 +67,29 @@
 	
 	<!-- FileManager 등록 -->
 	<bean id="fileManager" class="com.edu.springshop.util.FileManager"></bean>
+	
+	<!-- 문자열 암호화 관련 빈 설정 -->
+	<bean id="passConverter" class="com.edu.springshop.util.PassConverter"></bean>
+	
+	<!-- 이메일 관련 빈 설정 -->
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com"></property>
+		<property name="port" value="587"></property>
+		<property name="username" value="snsrrhc3078"></property>
+		<property name="password" value="bdadvuwjljibqukb"></property>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+				<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+    			<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 내가 만든 이메일 전송 객체 빈에 등록 -->
+	<bean id="emailManager" class="com.edu.springshop.util.EmailManager"></bean>
+	
 </beans>
