@@ -83,9 +83,13 @@ function regist(){
 		data:$("#form1").serialize(),
 		success:(result, status, xhr)=>{
 			console.log(result);
+			console.log(status);
+			console.log(xhr);
 		},
 		error:(xhr, status, err)=>{
 			console.log(xhr);
+			console.log(status);
+			console.log(err);
 		},
 	});
 }

@@ -48,6 +48,7 @@ public class MemberServiceImpl implements MemberService{
 		emailManager.send(member.getEmail());
 		
 		//등록
+		memberDAO.insert(member);
 	}
 
 	public void update(Member member) {

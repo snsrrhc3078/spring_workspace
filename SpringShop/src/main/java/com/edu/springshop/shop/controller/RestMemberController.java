@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.springshop.domain.Member;
+import com.edu.springshop.exception.EmailException;
 import com.edu.springshop.exception.HashException;
 import com.edu.springshop.exception.MemberException;
 import com.edu.springshop.model.member.MemberService;
@@ -37,27 +38,29 @@ public class RestMemberController {
 		return entity;
 	}
 	
-	@ExceptionHandler(HashException.class)
-	public ResponseEntity<Message> handle(HashException e){
-		Message message = new Message();
-		message.setMsg(e.getMessage());
-		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.CREATED);
-		return entity;
-	}
-	
-	@ExceptionHandler(MailException.class)
-	public ResponseEntity<Message> handle(MailException e){
-		Message message = new Message();
-		message.setMsg(e.getMessage());
-		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.CREATED);
-		return entity;
-	}
-	
-	@ExceptionHandler(MemberException.class)
+	@ExceptionHandler(value = MemberException.class)
 	public ResponseEntity<Message> handle(MemberException e){
+		System.out.println("예외 핸들러 호출");
 		Message message = new Message();
-		message.setMsg(e.getMessage());
-		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.CREATED);
+		message.setMsg("실패");
+		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
 		return entity;
 	}
+	@ExceptionHandler(value = HashException.class)
+	public ResponseEntity<Message> handle(HashException e){
+		System.out.println("예외 핸들러 호출");
+		Message message = new Message();
+		message.setMsg("실패");
+		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+		return entity;
+	}
+	@ExceptionHandler(value = EmailException.class)
+	public ResponseEntity<Message> handle(EmailException e){
+		System.out.println("예외 핸들러 호출");
+		Message message = new Message();
+		message.setMsg("실패");
+		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+		return entity;
+	}
+	
 }

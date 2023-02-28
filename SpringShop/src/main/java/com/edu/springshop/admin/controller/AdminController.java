@@ -2,11 +2,18 @@ package com.edu.springshop.admin.controller;
 
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.edu.springshop.domain.Admin;
+import com.edu.springshop.exception.AdminException;
 
 @Controller
 public class AdminController {
@@ -14,10 +21,30 @@ public class AdminController {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@GetMapping("/main")
-	public ModelAndView getMain() {
-		logger.info("123123");
-		return new ModelAndView("/admin/index");
+	public ModelAndView getMain(HttpServletRequest request) throws AdminException{
+		//logger.info("123123");
+		
+		//로그인 인증 여부를 따져봐야 한다
+		HttpSession session = request.getSession();
+		Admin admin = (Admin)session.getAttribute("admin");
+		
+		ModelAndView mav = new ModelAndView("/admin/index");
+		
+		if(admin==null) throw new AdminException("로그인이 필요한 서비스입니다");
+		return mav;
 	}
 	
+	@GetMapping("/loginform")
+	public ModelAndView getLoginform(HttpServletRequest request) {
+		return new ModelAndView("/admin/login/loginform");
+	}
+	
+//	@ExceptionHandler(AdminException.class)
+//	public ModelAndView handle(RuntimeException e) {
+//		ModelAndView mav = new ModelAndView();
+//		mav.addObject("e", e);
+//		mav.setViewName("/admin/error/result");
+//		return mav;
+//	}
 	
 }
