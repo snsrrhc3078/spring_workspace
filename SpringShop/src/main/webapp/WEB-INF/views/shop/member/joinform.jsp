@@ -42,7 +42,8 @@
 				        <div class="form-group">
 				            <input type="text" class="form-control" placeholder="Enter email" name="email">
 				        </div>
-				        <button type="button" class="btn btn-primary" id="bt_regist">가입</button>
+				        <button type="button" class="btn btn-primary" id="bt_registAsync">비동기 가입</button>
+				        <button type="button" class="btn btn-primary" id="bt_regist">동기 가입</button>
 				        
 				    </form>
     			
@@ -70,7 +71,7 @@
 <!-- Js Plugins -->
 <%@ include file="../inc/footer_link.jsp" %>
 <script type="text/javascript">
-function regist(){
+function registAsync(){
 	/* $("#form1").attr({
 		action:"/member/join.jsp",
 		method:"post"
@@ -94,7 +95,19 @@ function regist(){
 	});
 }
 
+function regist() {
+	$("#form1").attr({
+		action:"/member/regist",
+		method:"POST"
+	});
+	
+	$("#form1").submit();
+}
+
 $(function(){
+	$("#bt_registAsync").click(function(){
+		registAsync();	
+	});
 	$("#bt_regist").click(function(){
 		regist();	
 	});

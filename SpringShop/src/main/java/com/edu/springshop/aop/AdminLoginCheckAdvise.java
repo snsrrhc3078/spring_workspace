@@ -47,8 +47,9 @@ public class AdminLoginCheckAdvise {
 		String uri = request.getRequestURI(); //
 		if(
 				!(
-				uri.equals("/admin/loginform") ||
-				uri.equals("/admin/rest/login/admin")
+				uri.equals("/admin/loginform") || //로그인폼 요청시 제외
+				uri.equals("/admin/rest/login/admin") || //비동기 로그인 요청시 제외
+				uri.equals("/admin/login")//동기방식으로 로그인 요청으로 들어올 때 제외
 				)
 				
 		) { //로그인 필요 없는 경우인지 확인

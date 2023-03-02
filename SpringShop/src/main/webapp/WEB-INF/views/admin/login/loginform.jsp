@@ -66,7 +66,10 @@
 									</div>
 									<div class="card-footer">
 										<button type="button" class="btn btn-success" id="bt_login">
-											로그인
+											동기로그인
+										</button>
+										<button type="button" class="btn btn-success" id="bt_loginAsync">
+											비동기 로그인
 										</button>
 										<button type="button" class="btn btn-default" id="bt_regist">
 											회원가입
@@ -96,13 +99,16 @@
 </body>
 <script type="text/javascript">
 	$(()=>{
+		$("#bt_loginAsync").click(()=>{
+			loginAsync();
+		});
 		$("#bt_login").click(()=>{
 			login();
 		});
 		$("#bt_regist").click(()=>{});
 	});
 	
-	function login() {
+	function loginAsync() {
 		let formData = $("#form1").serialize();
 		
 		$.ajax({
@@ -118,8 +124,17 @@
 			error:(xhr, status, err)=>{
 				alert(xhr.responseJSON.msg);
 				console.log(xhr.responseJSON);
+				console.log(xhr);
 			}
 		});
+	}
+	function login() {
+		$("#form1").attr({
+			action:"/admin/login",
+			method:"POST",
+		});
+		
+		$("#form1").submit();
 	}
 </script>
 </html>

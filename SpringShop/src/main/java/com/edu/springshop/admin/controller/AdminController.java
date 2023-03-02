@@ -7,18 +7,24 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.edu.springshop.domain.Admin;
 import com.edu.springshop.exception.AdminException;
+import com.edu.springshop.model.admin.AdminService;
 
 @Controller
 public class AdminController {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	private AdminService adminService;
 	
 	@GetMapping("/main")
 	public ModelAndView getMain(HttpServletRequest request) throws AdminException{
@@ -37,6 +43,17 @@ public class AdminController {
 	@GetMapping("/loginform")
 	public ModelAndView getLoginform(HttpServletRequest request) {
 		return new ModelAndView("/admin/login/loginform");
+	}
+	
+	//로그인 요청 처리
+	@PostMapping("/login")
+	public ModelAndView login(HttpServletRequest request, Admin admin) { 
+		//3단계
+		Admin result = adminService.login(admin);
+		
+		
+		ModelAndView mav = new ModelAndView("redirect:/admin/main");
+		return mav;
 	}
 	
 //	@ExceptionHandler(AdminException.class)

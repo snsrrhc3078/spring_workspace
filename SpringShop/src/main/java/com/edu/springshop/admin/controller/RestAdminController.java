@@ -41,11 +41,11 @@ public class RestAdminController {
 		return entity;
 	}
 	
-	@ExceptionHandler(AdminException.class)
-	public ResponseEntity<Message> handle(RuntimeException e){
-		Message message = new Message();
-		message.setMsg(e.getMessage());
-		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
-		return entity;
-	}
+//	@ExceptionHandler(AdminException.class)
+//	public ResponseEntity<Message> handle(RuntimeException e){
+//		Message message = new Message();
+//		message.setMsg(e.getMessage());
+//		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+//		return entity;
+//	}
 }
