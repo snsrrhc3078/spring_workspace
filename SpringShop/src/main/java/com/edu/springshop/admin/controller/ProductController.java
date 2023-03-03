@@ -2,6 +2,8 @@ package com.edu.springshop.admin.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,7 @@ public class ProductController {
 	private ProductService productService;
 	
 	@GetMapping("/product/registform")
-	public ModelAndView getForm() {
+	public ModelAndView getForm(HttpServletRequest request) {
 		
 		//3단계
 		List<Category> categoryList = categoryService.selectAll();
@@ -39,7 +41,7 @@ public class ProductController {
 	}
 	
 	@PostMapping("/product")
-	public ResponseEntity<Message> regist(Product product){
+	public ResponseEntity<Message> regist(HttpServletRequest httpServletRequest, Product product){
 		
 		
 		
@@ -52,7 +54,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/product/list")
-	public ModelAndView getList() {
+	public ModelAndView getList(HttpServletRequest request) {
 		
 		//3단계
 		List productList = productService.selectAll();
@@ -65,7 +67,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/product/detail")
-	public ModelAndView getDetail(Product product) {
+	public ModelAndView getDetail(HttpServletRequest request, Product product) {
 		//3단계
 		product = productService.select(product.getProduct_idx());
 		List<Category> categoryList = categoryService.selectAll();

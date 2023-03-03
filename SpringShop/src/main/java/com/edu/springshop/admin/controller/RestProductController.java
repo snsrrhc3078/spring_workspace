@@ -40,8 +40,10 @@ public class RestProductController {
 		ServletContext context = request.getSession().getServletContext();
 		logger.info("realpath in context in session : " + context.getRealPath("/resources/data"));
 		
+		logger.info("product is : " + product);
+		
 		//3단계
-		productService.regist(product, context.getRealPath("/resources/data/"));
+		//productService.regist(product, context.getRealPath("/resources/data/"));
 		
 		Message message = new Message();
 		

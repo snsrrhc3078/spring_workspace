@@ -35,12 +35,12 @@
 	<beans:bean id="adminLoginCheckAdvise" class="com.edu.springshop.aop.AdminLoginCheckAdvise"/>
 	
 	<!-- 관점등록 -->
-	<aop:config>
+	<!-- <aop:config>
 		<aop:aspect ref="adminLoginCheckAdvise">
 			<aop:pointcut expression="execution(public * com.edu.springshop.admin.controller..*(..))" id="adminLoginCheckPointCut"/>
 			<aop:around method="sessionCheck" pointcut-ref="adminLoginCheckPointCut"/>
 		</aop:aspect>
-	</aop:config>
+	</aop:config> -->
 	
 	
 	
