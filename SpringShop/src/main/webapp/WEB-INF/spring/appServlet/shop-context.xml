@@ -69,4 +69,23 @@
 			<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
 		</websocket:handshake-interceptors>				
 	</websocket:handlers> 
+	
+	<!-- 구글 로그인 관련된 정보 등록 -->
+	<beans:bean id="googleConnectionFactory" class="org.springframework.social.google.connect.GoogleConnectionFactory">
+		<!-- 구글 클라우드 플랫폼 에서 발급받은 CID + 시크릿 등록 -->
+		<beans:constructor-arg name="clientId" value="728596130251-fnpiamv1sjo9d670rst723ljeuu36llq.apps.googleusercontent.com"></beans:constructor-arg>
+		<beans:constructor-arg name="clientSecret" value="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"></beans:constructor-arg>
+	</beans:bean>
+
+	<!-- oauth 설정 -->
+	<beans:bean class="org.springframework.social.oauth2.OAuth2Parameters">
+		<!-- Resource Owner로부터 어떠한 정보를 수집할지 그 범위 설정 -->
+		<beans:property name="scope" value="https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"/>
+		
+		<!-- Resource Owner 가 인증할 때, 콜백받을 우리 웹사이트 URI -->
+		<beans:property name="redirectUri" value="http://localhost:8888/member/auth/google"/>
+	</beans:bean>
+	
+	<beans:bean id="" class="com.edu.springshop.sns.GoogleLogin"></beans:bean>
 </beans:beans>
+

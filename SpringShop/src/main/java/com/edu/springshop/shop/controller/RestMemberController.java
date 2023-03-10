@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import com.edu.springshop.exception.EmailException;
 import com.edu.springshop.exception.HashException;
 import com.edu.springshop.exception.MemberException;
 import com.edu.springshop.model.member.MemberService;
+import com.edu.springshop.sns.GoogleLogin;
 import com.edu.springshop.util.Message;
 
 
@@ -25,6 +27,7 @@ public class RestMemberController {
 	
 	@Autowired
 	private MemberService memberService;
+	
 	
 	//회원가입 요청 처리
 	@PostMapping("/member")
@@ -39,6 +42,7 @@ public class RestMemberController {
 		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.CREATED);
 		return entity;
 	}
+	
 	
 //	@ExceptionHandler(value = MemberException.class)
 //	public ResponseEntity<Message> handle(MemberException e){
