@@ -18,6 +18,7 @@ import com.edu.springshop.exception.HashException;
 import com.edu.springshop.exception.MemberException;
 import com.edu.springshop.model.member.MemberService;
 import com.edu.springshop.sns.GoogleLogin;
+import com.edu.springshop.sns.KakaoLogin;
 import com.edu.springshop.util.Message;
 
 
@@ -28,6 +29,10 @@ public class RestMemberController {
 	@Autowired
 	private MemberService memberService;
 	
+	@Autowired
+	private GoogleLogin googleLogin;
+	@Autowired
+	private KakaoLogin kakaoLogin;
 	
 	//회원가입 요청 처리
 	@PostMapping("/member")
@@ -40,6 +45,28 @@ public class RestMemberController {
 		message.setCode(201);
 		message.setMsg("회원등록 성공");
 		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.CREATED);
+		return entity;
+	}
+	
+	//로그인폼에서 사용할 sns 인증화면의 링크 주소 요청을 처리
+	@GetMapping("/member/authform/google")
+	public ResponseEntity<Message> getUrlGoogle(HttpServletRequest request){
+		
+		String uri = googleLogin.getGrantUrl();
+		
+		Message message = new Message();
+		message.setMsg(uri);
+		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.OK);
+		return entity;
+	}
+	@GetMapping("/member/authform/kakao")
+	public ResponseEntity<Message> getUrlKakao(HttpServletRequest request){
+		
+		String uri = kakaoLogin.getGrantUrl();
+		
+		Message message = new Message();
+		message.setMsg(uri);
+		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.OK);
 		return entity;
 	}
 	

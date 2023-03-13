@@ -84,7 +84,16 @@ $(function(){
 		location.href = "<%//= request.getAttribute("url") %>";
 	});
 	$("#bt_google").click(()=>{
-		location.href = "/member/authform/google";
+		//SNS사업자가 미리 만들어놓은 인증화면 주소를 요청행 ㅑ한다
+		//따라서 주소 및 파라미터명이 이미 정해져있다
+		//(어디서 조사해야하나?구글 개발자 사이트에 공시되어있다)
+		gotoAuthForm("google");
+	});
+	$("#bt_kakao").click(()=>{
+		gotoAuthForm("kakao");
+	});
+	$("#bt_naver").click(()=>{
+		gotoAuthForm("naver");
 	});
 	
 	$("#bt_login").click(function(){
@@ -101,6 +110,17 @@ $(function(){
 	});
 	
 });
+
+function gotoAuthForm(sns) {
+	$.ajax({
+		url:"/rest/member/authform/"+sns,
+		type:"GET",
+		success:(result, status, xhr)=>{
+			console.log("인증 주소는", result.msg);
+			location.href=result.msg;
+		}
+	});
+}
 </script>
 </body>
 
