@@ -1,6 +1,7 @@
 package com.edu.springshop.shop.controller;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,6 +27,8 @@ import com.edu.springshop.sns.GoogleLogin;
 import com.edu.springshop.sns.GoogleOAuthToken;
 import com.edu.springshop.sns.KakaoLogin;
 import com.edu.springshop.sns.KakaoOAuthToken;
+import com.edu.springshop.sns.NaverLogin;
+import com.edu.springshop.sns.NaverOAuthToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +48,8 @@ public class MemberController {
 
 	@Autowired
 	private KakaoLogin kakaoLogin;
+	@Autowired
+	private NaverLogin naverLogin;
 
 	// 회원가입 폼 요청처리
 	@GetMapping("/member/joinform")
@@ -267,19 +272,115 @@ public class MemberController {
 			e.printStackTrace(); 
 		}
 		
-		String id = (String)userMap.get("id"); 
-		String email = (String)userMap.get("email"); 
-		boolean verified_email = (Boolean)userMap.get("verified_email"); 
-		String name = (String)userMap.get("name"); 
-		String given_name = (String)userMap.get("given_name"); 
-		String picture = (String)userMap.get("picture"); 
-		String ko = (String)userMap.get("ko");
-		
+		long id = (Long)userMap.get("id"); 
+		String connected_at = (String)userMap.get("connected_at");
+		//내부의 json은 맵으로 처리
+		Map<String, Object> properties = (Map)userMap.get("properties");
+		String nickname = (String)properties.get("nickname");
+		logger.info("닉네임 : "+nickname);
 		if(false) { //이미 db에 이 회원의 식별 고유 id 가 존재할 경우 //회원가입을 처리 (서비스의 regist) 세션에 담자
 		
 		}else { //그렇지 않은 경우 //로그인 처리만 하자 (세션에 담자)
 		
 		}
+		 
+
+		ModelAndView mav = new ModelAndView("redirect:/");
+		return mav;
+	}
+	
+	// 네이버 로그인 콜백
+	@GetMapping("/sns/naver/callback")
+	public ModelAndView naverCallback(HttpServletRequest request, HttpSession session) {
+		String code = (String) request.getParameter("code");
+		logger.info("code : " + code);
+
+		// 구글이 넘겨준 code 와 내 계정이 보유한 cid + secret을 조합하여
+		// 구글 서버측에 token 발급을 요청해야 한다
+		// 이때 우리 스프링 서버는 상대적으로 클라이언트가 된다
+		// token은 회원정보에 접근할 수 있는 증명서 같은 개념
+
+		/*
+		 * 1. 토큰 취득을 위한 POST 헤더 구성하기
+		 */
+		String url = naverLogin.getToken_request_url();
+
+		// body의 파라미터 구성하기 <파라미터명, 파라미터값>
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+		params.add("code", code);
+		params.add("client_id", naverLogin.getClient_id());
+		params.add("client_secret", naverLogin.getClient_secret());
+		params.add("redirect_uri", naverLogin.getRedirect_uri());
+		params.add("grant_type", naverLogin.getGrant_type());
+		params.add("state", naverLogin.getState());
+
+		// post 방식 헤더
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/x-www-form-urlencoded");
+
+		// 머리와 몸 합치기
+		HttpEntity httpEntity = new HttpEntity(params, headers);
+
+		// 요청시도를 위한 객체 생성, 비동기방식의 요청을 위한 객체
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> entity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+		
+		// 2. 토큰 요청 후 ResponseEntity 로부터 토큰 꺼내기 
+		String body = entity.getBody();
+		logger.info("네이버에서 넘겨받은 응답 정보 : " + body);
+		  
+		// JSON으로 되어있는 문자열을 파싱하여 토큰을 가져오자 
+		ObjectMapper mapper = new ObjectMapper();
+		NaverOAuthToken oAuthToken = null; 
+		try { 
+			oAuthToken = mapper.readValue(body, NaverOAuthToken.class); 
+		} catch (JsonMappingException e) {
+			e.printStackTrace(); } 
+		catch (JsonProcessingException e) {
+			e.printStackTrace(); 
+		}
+		 
+		
+		//3. 토큰을 이용하여 회원정보에 접근 //oAuthToken 안의 토큰을 이용하여 회원정보에 접근 
+		String userinfo_url = naverLogin.getUserinfo_url(); 
+		logger.info("userinfo_url : "+userinfo_url);
+		
+		//get 방식 요청 구성 
+		HttpHeaders headers2 = new HttpHeaders();
+		headers2.add("Authorization", "Bearer "+ oAuthToken.getAccess_token());
+		logger.info("Access_Token : "+oAuthToken.getAccess_token());
+		//Bearer 뒤에 한칸 띄우고 token 넣어야 함 
+		HttpEntity entity2 = new HttpEntity(headers2);
+		
+		//비동기객체를 이용한 GET 요청 
+		RestTemplate restTemplate2 = new RestTemplate();
+		ResponseEntity<String> userEntity = restTemplate2.exchange(userinfo_url, HttpMethod.GET, entity2, String.class); 
+		String userBody = userEntity.getBody(); 
+		logger.info("userBody : "+userBody);
+//		
+//		//사용자 정보 추출하기 
+//		HashMap<String, Object> userMap = null; 
+//		try { 
+//			userMap = mapper.readValue(userBody, HashMap.class); } 
+//		catch (JsonMappingException e) {
+//			e.printStackTrace(); 
+//		} 
+//		catch (JsonProcessingException e) {
+//			e.printStackTrace(); 
+//		}
+//		
+//		long id = (Long)userMap.get("id"); 
+//		String connected_at = (String)userMap.get("connected_at");
+//		//내부의 json은 맵으로 처리
+//		Map<String, Object> properties = (Map)userMap.get("properties");
+//		String nickname = (String)properties.get("nickname");
+//		logger.info("닉네임 : "+nickname);
+//		if(false) { //이미 db에 이 회원의 식별 고유 id 가 존재할 경우 //회원가입을 처리 (서비스의 regist) 세션에 담자
+//		
+//		}else { //그렇지 않은 경우 //로그인 처리만 하자 (세션에 담자)
+//		
+//		}
 		 
 
 		ModelAndView mav = new ModelAndView("redirect:/");

@@ -19,6 +19,7 @@ import com.edu.springshop.exception.MemberException;
 import com.edu.springshop.model.member.MemberService;
 import com.edu.springshop.sns.GoogleLogin;
 import com.edu.springshop.sns.KakaoLogin;
+import com.edu.springshop.sns.NaverLogin;
 import com.edu.springshop.util.Message;
 
 
@@ -33,6 +34,8 @@ public class RestMemberController {
 	private GoogleLogin googleLogin;
 	@Autowired
 	private KakaoLogin kakaoLogin;
+	@Autowired
+	private NaverLogin naverLogin;
 	
 	//회원가입 요청 처리
 	@PostMapping("/member")
@@ -63,6 +66,16 @@ public class RestMemberController {
 	public ResponseEntity<Message> getUrlKakao(HttpServletRequest request){
 		
 		String uri = kakaoLogin.getGrantUrl();
+		
+		Message message = new Message();
+		message.setMsg(uri);
+		ResponseEntity<Message> entity = new ResponseEntity<Message>(message, HttpStatus.OK);
+		return entity;
+	}
+	@GetMapping("/member/authform/naver")
+	public ResponseEntity<Message> getUrlNaver(HttpServletRequest request){
+		
+		String uri = naverLogin.getGrantUrl();
 		
 		Message message = new Message();
 		message.setMsg(uri);
